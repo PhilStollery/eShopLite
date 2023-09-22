@@ -5,6 +5,7 @@ using Store.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<ProductService>();
+Console.WriteLine("**Setting up HTTPClient");
 builder.Services.AddHttpClient<ProductService>(c =>
 {
     var url = builder.Configuration["ProductEndpoint"] ?? throw new InvalidOperationException("ProductEndpoint is not set");
@@ -13,8 +14,23 @@ builder.Services.AddHttpClient<ProductService>(c =>
 })
 .AddStandardResilienceHandler( options => 
 {
+    //Retry is working
     options.TotalRequestTimeoutOptions.Timeout = TimeSpan.FromMinutes(5);   
-    options.RetryOptions.RetryCount = 5;
+    options.RetryOptions.RetryCount = 10;
+    options.RetryOptions.BackoffType = Polly.Retry.RetryBackoffType.Linear;
+    options.RetryOptions.BaseDelay = TimeSpan.FromSeconds(1);
+
+    // How do I switch on the circuit breaker?
+    options.CircuitBreakerOptions.BreakDuration = TimeSpan.FromMinutes(1);
+    options.CircuitBreakerOptions.FailureRatio = 0.9;
+    options.CircuitBreakerOptions.OnOpened = async args => {
+        Console.WriteLine("**Circuit open and stopping requests");
+        await Task.CompletedTask;  
+    };
+    options.CircuitBreakerOptions.OnClosed = async args => {
+        Console.WriteLine("**Circuit closed allowing requests");
+        await Task.CompletedTask;  
+    };
 });
 
 // Add services to the container.
@@ -39,3 +55,4 @@ app.MapRazorComponents<App>()
     .AddServerRenderMode();
 
  app.Run();
+
