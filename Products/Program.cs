@@ -10,8 +10,6 @@ builder.Services.AddDbContext<ProductDataContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseHttpsRedirection();
-
 app.MapProductEndpoints();
 
 app.UseStaticFiles();
