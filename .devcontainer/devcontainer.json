@@ -35,8 +35,8 @@
     "postCreateCommand": "dotnet restore",
     "remoteUser": "vscode",
     "hostRequirements": {
-        "memory": "8gb",
-        "cpus": 4
+        "memory": "4gb",
+        "cpus": 2
     },
     "remoteEnv": {
         "PATH": "${containerWorkspaceFolder}/.dotnet:${containerEnv:PATH}",
