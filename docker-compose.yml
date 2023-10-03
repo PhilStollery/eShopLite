@@ -9,7 +9,7 @@ services:
       dockerfile: DockerfileStore
     environment: 
       - ProductEndpoint=http://backend:8080
-      - ImagePrefix=https://humble-acorn-4ggg7qg5jp9hjgqv-5200.app.github.dev
+      - ImagePrefix=https://localhost/images
     ports:
       - "5902:8080"
     depends_on: 
