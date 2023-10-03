@@ -14,7 +14,7 @@ builder.Services.AddHttpClient<ProductService>(c =>
 {  
     options.RetryOptions.RetryCount = 7;
     options.TotalRequestTimeoutOptions.Timeout = TimeSpan.FromSeconds(260);
-})
+});
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
